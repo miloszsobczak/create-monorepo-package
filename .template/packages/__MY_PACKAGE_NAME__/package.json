@@ -1,0 +1,41 @@
+{
+  "name": "__MY_PACKAGE_NAME__",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint ./src",
+    "start:dev": "tsc --watch --preserveWatchOutput",
+    "prettier": "prettier 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "build": "npm build:esm && npm build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run prettier && npm run lint"
+  },
+  "keywords": [
+    "promise",
+    "queue",
+    "async",
+    "concurrency"
+  ],
+  "author": "__MY_GIT_USER_NAME__",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/__MY_GIT_USER_NAME__/__MY_PACKAGE_NAME__.git"
+  }
+}

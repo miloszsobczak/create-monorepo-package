@@ -1,0 +1,37 @@
+{
+    "name": "__MY_PACKAGE_NAME__-mono-repo",
+    "version": "1.0.0",
+    "description": "A monorepo for __MY_PACKAGE_NAME__ and demo",
+    "author": "__MY_GIT_USER_NAME__",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "^29.5.4",
+        "@typescript-eslint/eslint-plugin": "^6.5.0",
+        "@typescript-eslint/parser": "^6.5.0",
+        "concurrently": "^8.2.1",
+        "eslint": "^8.48.0",
+        "jest": "^29.6.4",
+        "prettier": "3.0.3",
+        "prettier-plugin-sort-imports": "^1.7.2",
+        "process": "^0.11.10",
+        "ts-jest": "^29.1.1",
+        "typescript": "^5.2.2"
+    },
+    "scripts": {
+        "start:dev": "concurrently \"npm run start:dev --workspace=\"__MY_PACKAGE_NAME__\" --if-present\" \"npm run start:dev --workspace=\"__MY_PACKAGE_NAME__-demo\" --if-present\"",
+        "build": "npm run build --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "prettier": "npm run prettier --workspaces --if-present",
+        "prettier:fix": "npm run prettier:fix --workspaces --if-present",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run prettier && npm run lint"
+    },
+    "engines": {
+        "node": ">=18.17.1"
+    },
+    "workspaces": [
+        "packages/__MY_PACKAGE_NAME__",
+        "packages/demo"
+    ]
+}
