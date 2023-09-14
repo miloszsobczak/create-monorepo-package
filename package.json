@@ -1,6 +1,6 @@
 {
   "name": "create-package-monorepo",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "description": "A demo-ready monorepo template with the capability to easily publish the package to the registry.",
   "bin": "./dist/index.js",
   "keywords": ["monorepo", "typescript", "npm", "creator", "boilerplate", "template", "publish", "registry"],
@@ -17,7 +17,7 @@
     "start:dev": "tsc --watch --preserveWatchOutput",
     "prettier": "prettier 'src/**/*.ts'",
     "prettier:fix": "prettier --write 'src/**/*.ts'",
-    "build": "tsc",
+    "build": "tsc && cp -R .template ./dist/.template",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run prettier && npm run lint"
   },
