@@ -1,23 +1,38 @@
 {
   "name": "create-package-monorepo",
-  "version": "1.0.1-beta",
+  "version": "1.0.2-beta",
   "description": "A demo-ready monorepo template with the capability to easily publish the package to the registry.",
   "bin": "./dist/index.js",
-  "keywords": ["monorepo", "typescript", "npm", "creator", "boilerplate", "template", "publish", "registry"],
+  "keywords": [
+    "monorepo",
+    "typescript",
+    "npm",
+    "creator",
+    "boilerplate",
+    "template",
+    "publish",
+    "registry"
+  ],
   "files": [
+    ".template",
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "package.json"
   ],
+  "engines": {
+    "node": ">=18.17.1"
+  },
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
+    "lint": "eslint index.ts",
+    "lint:fix": "eslint index.ts --fix",
     "start:dev": "tsc --watch --preserveWatchOutput",
-    "prettier": "prettier 'src/**/*.ts'",
-    "prettier:fix": "prettier --write 'src/**/*.ts'",
-    "build": "tsc && cp -R .template ./dist/.template",
+    "prettier": "prettier 'index.ts'",
+    "prettier:fix": "prettier --write 'index.ts'",
+    "copy": "cp -r .template dist/.template && cp LICENSE dist/LICENSE && cp package.json dist/package.json",
+    "build": "tsc && npm run copy",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run prettier && npm run lint"
   },
@@ -34,12 +49,14 @@
   "dependencies": {
     "axios": "^1.5.0",
     "chalk": "^5.3.0",
+    "cross-spawn": "^7.0.3",
     "figlet": "^1.6.0",
     "inquirer": "^9.2.11",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/cross-spawn": "^6.0.3",
     "@types/figlet": "^1.5.6",
     "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.5.4",

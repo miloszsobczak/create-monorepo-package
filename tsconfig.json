@@ -1,6 +1,9 @@
 {
+  "include": [
+    "index.ts",
+  ],
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
     "target": "ESNext",
     "lib": ["ESNext"],
@@ -20,5 +23,6 @@
     "inlineSourceMap": false,
     "noEmit": false,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
   }
 }

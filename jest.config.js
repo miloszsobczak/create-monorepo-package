@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-undef
 module.exports = {
     rootDir: './',
-    preset: 'ts-jest',
     testEnvironment: 'node',
     testMatch: [
         '<rootDir>/**/__tests__/**/*.test.ts'
@@ -36,15 +35,12 @@ module.exports = {
         }
     },
     coveragePathIgnorePatterns: [
-        'node_modules/',
-        '.template',
+        '../../node_modules/',
     ],
     testPathIgnorePatterns: [
-        'node_modules/',
-        '.template',
+        '../../node_modules/',
     ],
     modulePathIgnorePatterns: [
-        'node_modules/',
-        '.template',
+        '../../node_modules/',
     ]
 };

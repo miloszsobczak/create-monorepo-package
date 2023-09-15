@@ -7,6 +7,9 @@ import axios from 'axios';
 import util from 'util';
 import fs, { promises } from 'fs';
 import path from 'path';
+import spawn from 'cross-spawn';
+
+import packageJson from './package.json' assert { type: 'json' };
 
 type LookUpRecord = Record<string, string>;
 
@@ -20,6 +23,7 @@ enum QuestionNames {
 const { readFile, writeFile, readdir, stat, mkdir, rm, cp } = promises;
 const exists = util.promisify(fs.exists);
 
+const cacheDir = path.join(process.cwd(), '.create-package-monorepo-cache');
 
 const askQuestions = () => {
     const questions: QuestionCollection<Answers & {
@@ -80,6 +84,12 @@ const askQuestions = () => {
     return inquirer.prompt(questions);
 };
 
+const cleanUp = async () => {
+    if (await exists(cacheDir)) {
+        await rm(cacheDir, { recursive: true });
+    }
+};
+
 const copyFile = async (src: string, dest: string, encoding: BufferEncoding, lookUpRecord: LookUpRecord) => {
     const data = await readFile(src, { encoding });
 
@@ -121,8 +131,8 @@ const copyDir = async (src: string, dest: string, encoding: BufferEncoding, look
 };
 
 const writeDataToFiles = async (lookUpRecord: LookUpRecord) => {
-    const templateDir = path.join(process.cwd(), '.template');
-    const targetDir = path.join(process.cwd(), '.template-cache');
+    const templateDir = path.join(cacheDir, `node_modules/${packageJson.name}/dist/.template`);
+    const targetDir = path.join(cacheDir, '.template-cache');
     const encoding = 'utf-8';
 
     try {
@@ -139,6 +149,35 @@ const writeDataToFiles = async (lookUpRecord: LookUpRecord) => {
     }
 };
 
+const createCacheDir = async () => {
+    if (await exists(cacheDir)) {
+        await rm(cacheDir, { recursive: true });
+    }
+    await mkdir(cacheDir);
+};
+
+const installCurrentPackage = async () => {
+    const { name, version } = packageJson;
+
+    // install package in cache dir
+    const child = spawn('npm', ['install', `${name}@${version}`], {
+        cwd: cacheDir,
+        stdio: 'inherit',
+    });
+
+    return new Promise<void>((resolve, reject) => {
+        child.on('close', code => {
+            if (code !== 0) {
+                reject({
+                    command: `npm install ${name}@${version}`,
+                });
+                return;
+            }
+            resolve();
+        });
+    });
+};
+
 const init = async () => {
     console.log(
         chalk.green(
@@ -153,7 +192,12 @@ const init = async () => {
     );
 
     try {
-    // ask questions
+        // create cache dir
+        await createCacheDir();
+        // install npm packages
+        await installCurrentPackage();
+
+        // ask questions
         const answers = await askQuestions();
         const { 
             [QuestionNames.PACKAGE_PATH]: packagePath = '.',
@@ -172,10 +216,11 @@ const init = async () => {
 
         await writeDataToFiles(lookUpRecord);
         await cp(
-            path.join(process.cwd(), '.template-cache'),
+            path.join(cacheDir, '.template-cache'),
             distPath,
             { recursive: true }
         );
+        await cleanUp();
 
         console.log(chalk.green(`\n\nSuccessfully created ${chalk.bold(packageName)}!\n\n`));
         console.log(chalk.italic(
