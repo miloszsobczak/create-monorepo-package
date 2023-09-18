@@ -1,6 +1,6 @@
 {
   "name": "create-package-monorepo",
-  "version": "1.0.5-beta",
+  "version": "1.0.6-beta",
   "description": "A demo-ready monorepo template with the capability to easily publish the package to the registry.",
   "bin": "./dist/index.js",
   "keywords": [

@@ -143,6 +143,9 @@ const writeDataToFiles = async (lookUpRecord: LookUpRecord) => {
 
         // Start copying files
         await copyDir(templateDir, targetDir, encoding, lookUpRecord);
+
+        // Rename .npmignore to .gitignore
+        await renameNpmIgnore(targetDir);
     } catch (err) {
         console.error(err);
         throw err; // Throw the error to propagate it
@@ -176,6 +179,18 @@ const installCurrentPackage = async () => {
             resolve();
         });
     });
+};
+
+const renameNpmIgnore = async (targetDir: string) => {
+    const npmIgnorePath = path.join(targetDir, '.npmignore');
+    const gitIgnorePath = path.join(targetDir, '.gitignore');
+
+    if (await exists(npmIgnorePath)) {
+        await fs.rename(npmIgnorePath, gitIgnorePath, err => {
+            if (err) throw err;
+        });
+    }
+
 };
 
 const init = async () => {
