@@ -1,6 +1,6 @@
 {
   "name": "create-package-monorepo",
-  "version": "1.0.3-beta",
+  "version": "1.0.4-beta",
   "description": "A demo-ready monorepo template with the capability to easily publish the package to the registry.",
   "bin": "./dist/index.js",
   "keywords": [
@@ -34,9 +34,8 @@
     "prettier:fix": "prettier --write 'index.ts'",
     "copy": "cp -r .template dist/.template && cp LICENSE dist/LICENSE && cp package.json dist/package.json",
     "build": "tsc && npm run copy",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run prettier && npm run lint",
-    "preinstall": "check-node-version --node \"^18.17.1\""
+    "prepare": "check-node-version --node \"^18.17.1\" && npm run build",
+    "prepublishOnly": "npm test && npm run prettier && npm run lint"
   },
   "repository": {
     "type": "git",
