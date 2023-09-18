@@ -131,7 +131,7 @@ const copyDir = async (src: string, dest: string, encoding: BufferEncoding, look
 };
 
 const writeDataToFiles = async (lookUpRecord: LookUpRecord) => {
-    const templateDir = path.join(cacheDir, `node_modules/${packageJson.name}/dist/.template`);
+    const templateDir = path.join(cacheDir, `node_modules/${packageJson.name}/.template`);
     const targetDir = path.join(cacheDir, '.template-cache');
     const encoding = 'utf-8';
 
@@ -215,6 +215,7 @@ const init = async () => {
         const distPath = path.join(packagePath, packageName);
 
         await writeDataToFiles(lookUpRecord);
+        
         await cp(
             path.join(cacheDir, '.template-cache'),
             distPath,
